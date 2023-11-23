@@ -5,7 +5,7 @@ if(MSVC) # Win MSVC mode
   message(status "Setting MSVC flags")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHc /Zc:__cplusplus /std:c++latest")
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-else()
+else() # Gcc/Clang mode
   message(status "Setting GCC/Clang flags")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a -fexceptions -g -Wall")
 endif()

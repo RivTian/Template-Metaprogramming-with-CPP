@@ -12,9 +12,19 @@ namespace n101
       return a > b ? a : b;
    }
 
-   using swap_fn = void(*)(void*, int const, int const);
-   using compare_fn = bool(*)(void*, int const, int const);
+   using swap_fn = void(*)(void*, int const, int const);    // 接受两个int参数并返回void的函数的类型别名
+   using compare_fn = bool(*)(void*, int const, int const); // 接受两个int参数并返回bool的函数类型别名
 
+   /**
+    * @brief 将数组按照比较函数指定的顺序进行分区，并返回分区的边界点
+    *
+    * @param arr 待分区的数组
+    * @param low 分区的起始下标
+    * @param high 分区的结束下标
+    * @param fcomp 比较函数指针，用于指定元素之间的比较顺序
+    * @param fswap 交换函数指针，用于交换数组元素的位置
+    * @return int 分区的边界点
+    */
    int partition(void* arr, int const low, int const high,
       compare_fn fcomp, swap_fn fswap)
    {
@@ -45,6 +55,7 @@ namespace n101
       }
    }
 
+   // 为了实现快排函数, 需要为传递给函数的每种类型的数组提供比较和交换函数的实现.
    void swap_int(void* arr, int const i, int const j)
    {
       int* iarr = (int*)arr;
@@ -59,6 +70,9 @@ namespace n101
       return iarr[i] <= iarr[j];
    }
 
+   // 定义一个int类型的vector,
+   // 但其他类型的 vector 怎么办, 总不可能都写一遍吧
+   // 这个时候便体现了 模板 的重要性了.
    struct int_vector
    {
       int_vector();
@@ -75,12 +89,14 @@ namespace n101
 
       int at(size_t const index) const;
       int operator[](size_t const index) const;
+
    private:
       int* data_;
       size_t size_;
       size_t capacity_;
    };
 
+   // 常量表达式, 需要应对不同的编码
    constexpr char NewLine = '\n';
    constexpr wchar_t NewLineW = L'\n';
    constexpr char8_t NewLineU8 = u8'\n';
@@ -138,9 +154,10 @@ namespace n102
    }
 
    template <typename T>
-   struct vector
+   struct Vector
    {
-      vector();
+   public:
+      Vector();
 
       size_t size() const;
       size_t capacity() const;
@@ -166,12 +183,16 @@ namespace n102
 
 int main()
 {
+   // 无论模板表示函数、类还是变量，声明和使用模板的语法都是相同的。
    {
       using namespace n101;
 
       int arr[] = { 13, 1, 8, 3, 5, 2, 1 };
       int n = sizeof(arr) / sizeof(arr[0]);
       quicksort(arr, 0, n - 1, less_int, swap_int);
+      for (auto i : arr)
+         std::cout << i << " ";
+      std::cout << std::endl;
    }
 
    {
@@ -201,6 +222,16 @@ int main()
 
       std::wstring test = L"demo";
       test += NewLine<wchar_t>;
-      std::wcout << test;
+      std::wcout << test ;// << n101::NewLineW;
+   }
+
+   {
+      using namespace n102;
+
+      // 目前仅声明了定义
+      // Vector<int> v; // error
+      // v.push_back(1); // error
+      // v.push_back(2);
+      // std::cout << v.at(1); // error
    }
 }
