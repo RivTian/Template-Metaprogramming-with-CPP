@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(templatesbook)
+
+set(CMAKE_CXX_STANDARD 20)
   
 if(MSVC) # Win MSVC mode
   message(status "Setting MSVC flags")
